@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { ne } = require('sequelize/types/lib/operators');
+// const { ne } = require('sequelize/types/lib/operators');
 let Instruction;
 let moduleError;
 

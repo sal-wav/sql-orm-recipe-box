@@ -20,6 +20,7 @@ function handleError(e, data, property, fileName) {
 router.post('/', async (req, res) => {
   try {
     const recipeId = Number.parseInt(req.body.recipeId);
+    console.log(instructionRepo);
     await instructionRepo.createNewInstruction(req.body.specification, recipeId);
     res.redirect('/recipes/' + req.body.recipeId + '/edit');
   } catch (e) {
