@@ -2,7 +2,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Ingredient = sequelize.define('Ingredient', {
     amount: DataTypes.NUMERIC,
-    mesaurementUnitId: DataTypes.INTEGER,
+    measurementUnitId: DataTypes.INTEGER,
     foodStuff: {
       type: DataTypes.STRING,
       validate: {

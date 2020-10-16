@@ -1,4 +1,6 @@
 const { Op } = require('sequelize');
+const ingredient = require('../models/ingredient');
+const measurementunit = require('../models/measurementunit');
 let Recipe, Instruction, Ingredient, MeasurementUnit;
 let moduleError;
 
@@ -21,6 +23,10 @@ try {
 
 
 async function getTenNewestRecipes() {
+  return await Recipe.findAll({
+    order: [["updatedAt", "DESC"]],
+    limit: 10,
+  });
   // Use the findAll method of the Recipe object to return the recipes.
   // Use the options for findAll to **limit** the number of objects and order it
   //   appropriately. (That's a hint. Look through that documentation for that
@@ -37,6 +43,15 @@ async function getTenNewestRecipes() {
 }
 
 async function getRecipeById(id) {
+  return Recipe.findByPk(id, {
+    include: [
+      Instruction, {
+        model: Ingredient,
+        include: [MeasurementUnit]
+      }
+    ]
+  });
+
   // Use the findByPk method of the Recipe object to return the recipe. Use
   // nested eager loading to load the associated instructions, ingredients, and
   // measurement units.
@@ -74,6 +89,7 @@ async function getRecipeById(id) {
 }
 
 async function deleteRecipe(id) {
+  Recipe.destroy({where:{id}});
   // Use the findByPk method of the Recipe object to get the object and, then,
   // destroy it. Or, use the Model.destroy({ ... where ... }) method that you
   // saw in the video.
@@ -82,6 +98,7 @@ async function deleteRecipe(id) {
 }
 
 async function createNewRecipe(title) {
+  return Recipe.create({title: `${title}`});
   // Use the create method of the Recipe object to create a new object and
   // return it.
   //
@@ -89,6 +106,8 @@ async function createNewRecipe(title) {
 }
 
 async function searchRecipes(term) {
+  // let lowerTitle = title.toLowerCase();
+  return Recipe.findAll({where: {title: {[Op.iLike]: '%' + `${term}`+ '%'},}})
   // Use the findAll method of the Recipe object to search for recipes with the
   // given term in its title
   //
