@@ -1,4 +1,5 @@
 const { Op } = require('sequelize');
+const { ne } = require('sequelize/types/lib/operators');
 let Instruction;
 let moduleError;
 
@@ -21,6 +22,18 @@ try {
 
 
 async function createNewInstruction(specification, recipeId) {
+  const instructions = await Instruction.findAll({
+    where: { recipeId }
+  });
+  const listOrder = instructions.length + 1;
+
+  return await Instruction.create({ specification, recipeId, listOrder });
+
+
+  // let newInstruction = await Instruction.create({
+  //   specification: `${specification}`, recipeId: recipeId });
+
+  // return instructionsArr;
   // Use the findAll method of the Instruction object to find all the
   // instructions for the specified recipe.
   //
